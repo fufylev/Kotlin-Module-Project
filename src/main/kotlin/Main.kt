@@ -1,3 +1,7 @@
+import data.Archive
+import data.Screen
+import java.util.Scanner
+
 /*
 Надо написать консольное приложение для заметок, чтобы складывать туда всю нужную информацию.
 Описание задания
@@ -59,4 +63,15 @@ image
 Само чтение из консоли можно реализовать через Scanner. Для этого добавьте в начало файла import java.util.Scanner и в месте кода, где хотите прочитать строчку из консоли, введите Scanner(System.`in`).nextLine().
 */
 
-fun main(args: Array<String>) {}
+fun main(args: Array<String>) {
+    // ЕДИНСТВЕННЫЙ Scanner на всю программу — создаётся один раз и передаётся во все экраны.
+    // Были баги если создавать инстанс во всех классах
+    val scanner = Scanner(System.`in`)
+
+    val archives: MutableList<Archive> = mutableListOf()
+    val firstScreen: Screen = ArchiveScreen(scanner, archives)
+    firstScreen.show()
+
+    // выполнится только после выхода из программы
+    println("До свидания!")
+}
