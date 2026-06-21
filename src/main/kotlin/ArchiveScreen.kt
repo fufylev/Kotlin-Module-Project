@@ -15,13 +15,13 @@ class ArchiveScreen(
         // сразу появится в списке.
         while (true) {
 
-            val menu = Navigator("Список архивов:", scanner)
+            val navigator = Navigator("Список архивов:", scanner)
 
             // Пункт создания нового архива.
-            menu.addItem("Создать архив", object : Action {
+            navigator.addItem("Создать архив", object : Action {
                 override fun execute() {
                     print("Введите название архива: ")
-                    val title = menu.graspLine()
+                    val title = navigator.graspLine()
 
                     if (title.isEmpty()) {
                         println("Ошибка: название не может быть пустым.")
@@ -34,16 +34,19 @@ class ArchiveScreen(
             })
 
             for (archive in archives) {
-                menu.addItem(archive.title) {
-                    // TODO - Добавление заметок
-                }
+                navigator.addItem(archive.title, object : Action {
+                    override fun execute() {
+                        // При выборе архива создаём экран его заметок и показываем (работает, пока не нажмут «Назад»).
+                        NoteScreen(scanner, archive).show()
+                    }
+                })
             }
 
-            menu.addItem("Выход", Action { })
+            navigator.addItem("Выход", Action { })
 
             // show() вернёт true ТОЛЬКО при выборе «Выход» — тогда выходим из экрана (и из программы).
             // При любом другом выборе show() вернёт false, цикл повторится и меню пересоберётся.
-            if (menu.show()) return
+            if (navigator.show()) return
         }
     }
 }
