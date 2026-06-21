@@ -1,46 +1,15 @@
 package navigator
 
 import data.Action
-import java.util.Scanner
+import data.ScannerSingleton
 
 private data class NavigatorItem(val path: String, val action: Action)
 
-/** !!! Люблю делать такие комменты чтобы понять самому что я хочу сделать
- * Навигатор — общий класс для всех экранов-меню.
- * Каждый экран не пишет свой цикл ввода/вывода, а использует Navigator:
- * наполняет его пунктами через [addItem] и запускает через [show].
- *
- * Состав Navigator (общий код, переиспользуемый всеми экранами):
- *
- *     ┌─────────────────────── Navigator ───────────────────────
- *     │  title    : String           — заголовок меню
- *     │  scanner  : Scanner          — единый ввод (читает graspLine)
- *     │  items    : [(path, action)] — пункты меню
- *     │  addItem(path, action)       — добавить пункт
- *     │  graspLine() : String        — прочитать строку ввода
- *     │  show() : Boolean            — отрисовать меню (цикл ниже)
- *     └─────────────────────────────────────────────────────────
- *
- *     Цикл внутри show()  (вывод → ввод → действие):
- *
- *     ┌──►  1. ВЫВОД:  печатаем title и пункты с номерами
- *     │                   │
- *     │                   ▼
- *     │         2. ВВОД:  читаем строку → number
- *     │                   │
- *     │             ┌─────┴──────┐
- *     │           неверно      верно
- *     │             │            │
- *     │             ▼            ▼
- *     │       «Ошибка…»    3. ДЕЙСТВИЕ: action.execute()
- *     └─── (повтор)                │
- *                                  ▼
- *                       return true  ← выбран последний пункт
- *                                       («Выход» / «Назад»)
- */
+// Название класса дебильное но изначально прочитал строку в ТЗ:
+// "Можно заметить, что у экранов выбора общая навигация и ввод. Именно это и надо вынести в отдельный класс:"
+// и так и оставил это навигатором ))
 class Navigator(
-    private val title: String,
-    private val scanner: Scanner
+    private val title: String
 ) {
     private val items: MutableList<NavigatorItem> = mutableListOf()
 
@@ -48,7 +17,7 @@ class Navigator(
         items.add(NavigatorItem(path, action))
     }
 
-    fun graspLine(): String = scanner.nextLine().trim()
+    fun graspLine(): String = ScannerSingleton.scanner.nextLine().trim()
 
     fun show(): Boolean {
         while (true) {
@@ -60,7 +29,7 @@ class Navigator(
             }
 
             val chosenNumber =
-                scanner.nextLine().trim().toIntOrNull()
+                ScannerSingleton.scanner.nextLine().trim().toIntOrNull()
 
             when {
                 chosenNumber == null -> {

@@ -2,11 +2,9 @@ import data.Action
 import data.Archive
 import data.Screen
 import navigator.Navigator
-import java.util.Scanner
 
 // Экран выбора и создания архивов — первый экран программы.
 class ArchiveScreen(
-    private val scanner: Scanner,
     private val archives: MutableList<Archive>
 ) : Screen {
 
@@ -15,7 +13,7 @@ class ArchiveScreen(
         // сразу появится в списке.
         while (true) {
 
-            val navigator = Navigator("Список архивов:", scanner)
+            val navigator = Navigator("Список архивов:")
 
             // Пункт создания нового архива.
             navigator.addItem("Создать архив", object : Action {
@@ -37,7 +35,7 @@ class ArchiveScreen(
                 navigator.addItem(archive.title, object : Action {
                     override fun execute() {
                         // При выборе архива создаём экран его заметок и показываем (работает, пока не нажмут «Назад»).
-                        NoteScreen(scanner, archive).show()
+                        NoteScreen(archive).show()
                     }
                 })
             }

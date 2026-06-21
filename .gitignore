@@ -36,3 +36,6 @@ bin/
 .idea/libraries/KotlinJavaRuntime.xml
 .idea/misc.xml
 .idea/kotlinc.xml
+*.gradle
+*.properties
+/gradle/
